@@ -1,4 +1,6 @@
 # STM32 F3 Discovery compiler for Linux
+Artem Bordiuh, Gabriel Yano. Conestoga
+**********************************************************************
 This project is a simple monitor program for the STM32F303VCT6 on the
 STM32F3 Discovery board.  This processor has 256K of flash, and 48K of
 RAM. The Discovery board has 10 LEDs, a 3 axis Gyroscope, 3 axis
