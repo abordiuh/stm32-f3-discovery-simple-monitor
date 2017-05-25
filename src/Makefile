@@ -6,10 +6,10 @@
 
 # C source files for the project
 PROJ_NAME = simple_monitor
-SRCS = main.c
+SRCS = main.c gpiocmd.c
 
 # C to assembly language templates
-SRCS += mycode.s mytest.c
+SRCS += mycode.s mytest.c 
 
 # Simple Monitor sources
 SRCS += monitor.c parser.c dump.c syscall.c terminal.c \
