@@ -28,6 +28,51 @@ mytest:
     pop  {pc}
     .size   mytest, .-mytest    @@ - symbol size (not req)
 
+@@ *****************************************************************
+@@ FUNCTION NAME: ledPatternFlash
+@@ PARAMETERS   : void
+@@ RETURNS      : void
+@@ DESCRIPTION  :
+@@  This function makes a the LED3 of the STM32F3DISCOVERY board
+@@  to toggle each 1s
+@@ *****************************************************************
+ 
+@@ <function block>
+    .align  2               @@ - 2^n alignment (n=2)
+    .syntax unified
+    .global ledPatternFlash          @@ - Symbol name for function
+    .code   16              @@ - 16bit THUMB code (BOTH are required!)
+    .thumb_func             @@ /
+    .type   ledPatternFlash, %function   @@ - symbol type (not req)
+
+@@ Declaration : void ledPatternFlash(void)
+@@ Uses r0 for param 0
+@@   r0: x
+ledPatternFlash:
+		push {lr}
+		push {r0-r7}
+   
+		LDR r0, =0
+		LDR r3, =7
+
+led:		BL BSP_LED_Toggle
+		ADD r0,#1
+		CMP r0,r3
+		BLE led				@@ toggle all leds until it reaches 7
+		
+		LDR r4, =myTickCount		@@ get the value of myTickCOunt as a timestamp
+		LDR r2,[r4]			@@ assign the value of myTickCount to r2
+		ADD r2,r2,#1000			@@ r2 represent 1s elapsed since the timestamp taken
+     
+delay:		LDR r1, =myTickCount		@@gets another timestamp
+		LDR r5,[r1]			@@assign the value of the timestamp to r5
+		CMP r5,r2			@@compare the current timestamp with the one got before
+		BLE delay			@@if 1s is not elapsed then loop again
+
+		pop	{r0-r7}
+		pop	{pc}
+	
+	.size   mytest, .-mytest    @@ - symbol size (not req)
 @@ <function block>
     .align  2               @@ - 2^n alignment (n=2)
     .syntax unified

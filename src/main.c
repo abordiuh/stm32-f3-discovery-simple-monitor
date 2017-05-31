@@ -1,17 +1,3 @@
-/**
- ******************************************************************************
- *  FILE          : main.c
- *  PROJECT       : CNTR 8000 - Assignment #1
- *  PROGRAMMER    : Gabriel Yano & Artem Bordiuh
- *  REVIEW VERSION: 2017-05-18
- *  DESCRIPTION   : Implemented a new command for flashing LEDs in a specific
- *					pattern with delay and repetition times.
- *	IMPROVMENTS   :	Improve freezing of the terminal at the time some command is
- 					executing by MCU. (Add some kind of job list for mcu and implement
-					each command execution with posibility to read from CMD (interrupt))
-					
- ******************************************************************************/
-
 #include <stdio.h>
 #include <string.h>
 #include "stm32f3xx_hal.h"
@@ -69,6 +55,8 @@ int main(int argc, char **argv)
   while(1) {
     TaskInput();
     my_Loop();
+
+    ledPatternFlash();       //That's the function we implemented in mycode.s
     /* Tickle the watchdog */
   }
 
@@ -166,7 +154,7 @@ void CmdLED(int mode)
 	   (unsigned int)led);
     return;
   }
-
+  
   led -= 3;
   if(val) {
     BSP_LED_On(LEDs[led]);
@@ -175,93 +163,35 @@ void CmdLED(int mode)
   }
 
 } 
-
 ADD_CMD("led",CmdLED,"<index> <state> Turn off/on LED")
 
-/**
-  * @brief  Will flash LED pattern n times with specified delay
-  *			Arguments for a console command are:
-  *			First: Repetiton times
-  *			Second: Pattern 1(downward flash) or 2(clockwise) or 3(counter clockwise)
-  *			Third: Delay time, ms
-  * @param  mode - variable for parser for a command line interface
-  * @retval None
-  */	
-void CmdAllLed(int mode) {
+void CmdAllLED(int mode) {
 
-	if (mode != CMD_INTERACTIVE) {
-		return;
-	}
-	uint32_t repetition = 1;
-	uint32_t pattern = 1;
-	uint32_t delay = 50;
-	
-	//Parsing command line arguments (repetition, pattern, delay) and store it
-	if (fetch_uint32_arg(&repetition)) {
-		printf("Standard repetition times is 1\r\n");
-	}
-	if (fetch_uint32_arg(&pattern)) {
-		printf("Standard pattern is 1\r\n");
-	}
-	if (fetch_uint32_arg(&delay)) {
-		printf("Standard delay is 50ms\r\n");
-	}
-	
-	//switching pattern type
-	switch (pattern) {
-		case 1: // Pattern flashing downwards
-			for (int i = 0; i <= repetition; i++) {
-				for (int j = 0; j < 8; j++) {
-					BSP_LED_Toggle(LEDs[j]);
-					HAL_Delay(delay);
-				}
-			}
-			break;
+if(mode != CMD_INTERACTIVE) {
+    return;
+  }
+	for(int i = 0; i<11;i++) {
 
-		case 2: // Pattern flashing clockwise
-			for (int i = 0; i <= repetition; i++) {
-				uint32_t j = 0;
-				int32_t countIndex = 2;
-				while (j < 8 && j >= 0) {
-					BSP_LED_Toggle(LEDs[j]);
-					HAL_Delay(delay);
-
-					if (j == 6) {
-						j = 9;
-						countIndex = -2;
-					}
-
-					j += countIndex;
-				}
-			}
-			break;
-
-		case 3: // Pattern flashing counter-clockwise
-			for (int i = 0; i <= repetition; i++) {
-				uint32_t j = 1;
-				int32_t countIndex = 2;
-				BSP_LED_Toggle(LEDs[0]);
-				HAL_Delay(delay);
-				while (j < 8 && j >= 0) {
-					BSP_LED_Toggle(LEDs[j]);
-					HAL_Delay(delay);
-
-					if (j == 7) {
-						j = 8;
-						countIndex = -2;
-					}
-
-					j += countIndex;
-				}
-			}
-			break;
-		//if no correct pattern specified
-		default: printf("No such a pattern\r\n");
-	}
+	BSP_LED_Toggle(LEDs[0]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[1]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[2]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[3]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[4]);
+	HAL_Delay(100);	
+	BSP_LED_Toggle(LEDs[5]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[6]);
+	HAL_Delay(100);
+	BSP_LED_Toggle(LEDs[7]);
 }
 
-//Adding ledall command to flash specific pattern to a terminal
-ADD_CMD("ledall",CmdAllLed,"<times> <pattern(1-3)> <delay> Turn on/off All Leds in sequence")
+}
+
+ADD_CMD("ledall",CmdAllLED,"Turn off/on All Leds")
 
 void CmdAccel(int mode)
 {
