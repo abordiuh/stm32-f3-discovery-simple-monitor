@@ -22,6 +22,8 @@
 /*Including the gpio "gpioinit" and "gpio" commands*/
 #define INCLUDE_GPIO_CMDS
 
+#include "gpiocmd.h"
+
 /* Private variables ---------------------------------------------------------*/
 const Led_TypeDef LEDs[] = {LED3, LED4, LED5, LED6, LED7, LED8, LED9, LED10};
 const uint32_t numLEDs = sizeof (LEDs) / sizeof (LEDs[0]);
