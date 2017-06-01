@@ -6,7 +6,7 @@
 
 # C source files for the project
 PROJ_NAME = simple_monitor
-SRCS = main.c gpiocmd.h gpiocmd.c
+SRCS = main.c gpiocmd.c daccmd.c
 
 # C to assembly language templates
 SRCS += mycode.s mytest.c 
@@ -48,7 +48,9 @@ SRCS   += $(HAL_SRC)/stm32f3xx_hal_rcc.c \
           $(HAL_SRC)/stm32f3xx_hal_pcd.c \
           $(HAL_SRC)/stm32f3xx_hal_pcd_ex.c \
 	  $(HAL_SRC)/stm32f3xx_hal_i2c.c \
-	  $(HAL_SRC)/stm32f3xx_hal_spi.c
+	  $(HAL_SRC)/stm32f3xx_hal_spi.c \
+	  $(HAL_SRC)/stm32f3xx_hal_dac.c \
+	  $(HAL_SRC)/stm32f3xx_hal_dac_ex.c
 
 # USB Sources
 USB_CORE     = Drivers/STM32_USB_Device_Library/Core

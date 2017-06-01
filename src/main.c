@@ -2,13 +2,14 @@
  ******************************************************************************
 
  *  FILE          : main.c
- *  PROJECT       : Hardware and Software Interfacing - Assignment  #2
+ *  PROJECT       : Hardware and Software Interfacing - Assignment  #4
  *  PROGRAMMER    : Artem Bordiuh & Gabriel Yano
- *  REVISED	  : 05-25-207
- *  DESCRIPTION   : The gpiocmd.c file will add two new command to the terminal
-                    software of STM32 F3 Discovery. The commands will give user
-                    possibility to deal with GPIO.
-
+ *  REVISED	  	  : 06-01-207
+ *  DESCRIPTION   : This file adds two more commands to the simple monitor program.
+ *    The first command initializes the DAC peripheral that is taken as argument
+ *    to the function.
+ *    The second command sets the DAC value and prints the result to the desired 
+ *    pin, the arguments taken are the channel and the pin.
  ******************************************************************************
  **/
 #include <stdio.h>
@@ -21,6 +22,8 @@
 
 /*Including the gpio "gpioinit" and "gpio" commands*/
 #define INCLUDE_GPIO_CMDS
+/*Including the gpio "gpioinit" and "gpio" commands*/
+#define INCLUDE_DAC_CMDS
 
 #include "gpiocmd.h"
 
